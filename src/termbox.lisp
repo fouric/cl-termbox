@@ -1,12 +1,17 @@
 (in-package :termbox)
 
+(asdf:load-system :cl-autowrap)
+(asdf:load-system :cl-plus-c)
+(use-package :plus-c)
+
 (cffi:define-foreign-library termbox
   (t (:default "libtermbox")))
 
 (cffi:use-foreign-library termbox)
 
-(autowrap:c-include "/usr/include/termbox.h"
-		    :constant-accessor tb-const)
+(autowrap:c-include "/usr/include/termbox.h" :constant-accessor tb-const)
+
+;(cffi-sys:%load-foreign-library :libtest #p"/usr/lib/libtermbox.so")
 
 (defun init ()
   (tb-init))
@@ -41,9 +46,11 @@
 (defun test ()
   (init)
   (clear)
-  (change-cell 0 0 (char-code #\#) (const "TB_WHITE") 0)
+  (change-cell 0 0 (char-code #\#) (tb-const "TB_WHITE") 0)
   (present)
-  (plus-c:c-let ((event termbox:tb-event :free t))
+  ;(plus-c:c-let ((event '(:struct (tb-event)) :free t))
+  ; (poll-event event))
+  (with-alloc (event '(:struct (tb-event)))
     (poll-event event))
   (sleep 2)
   (shutdown))
