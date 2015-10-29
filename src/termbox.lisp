@@ -9,9 +9,8 @@
 
 (cffi:use-foreign-library termbox)
 
+; FIXME: the only reason why this is here is because we need tb-const to access constants
 (autowrap:c-include "/usr/include/termbox.h" :constant-accessor tb-const)
-
-;(cffi-sys:%load-foreign-library :libtest #p"/usr/lib/libtermbox.so")
 
 (defun init ()
   (tb-init))
@@ -19,14 +18,20 @@
 (defun shutdown ()
   (tb-shutdown))
 
+
 (defun clear ()
   (tb-clear))
 
 (defun present ()
   (tb-present))
 
+
 (defun change-cell (x y char fg bg)
   (tb-change-cell x y char fg bg))
+
+(defun put-cell (x y cell)
+  (tb-put-cell x y cell))
+
 
 (defun width ()
   (tb-width))
@@ -34,11 +39,17 @@
 (defun height ()
   (tb-height))
 
+
 (defun peek-event (event timeout)
   (tb-peek-event event timeout))
 
 (defun poll-event (event)
   (tb-poll-event event))
+
+
+(defun set-cursor (cx cy)
+  (tb-set-cursor cx cy))
+
 
 (defun const (str)
   (tb-const str))

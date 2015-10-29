@@ -6,13 +6,13 @@
   (:export
     #:init #:shutdown
     #:clear #:present
-    #:change-cell
+    #:change-cell #:put-cell
     #:width #:height
     #:peek-event #:poll-event
+    #:set-cursor
 
     #:const
 
     #:test
     #:tb-white
 ))
-;#:tb-event
