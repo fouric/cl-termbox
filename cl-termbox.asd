@@ -9,7 +9,7 @@
   :license "BSD-2-Clause"
   :version "0.0"
 
-  :depends-on (:alexandria :cl-autowrap :cl-plus-c :trivial-garbage)
+  :depends-on (:cl-autowrap :cl-plus-c :trivial-garbage)
   :pathname "src"
   :serial t
 
