@@ -17,9 +17,9 @@ Install Termbox (you should really read the actual Termbox instructions):
     ./waf
     sudo ./waf install --destdir=/
 
-Install cl-termbox using Quicklisp (http://www.quicklisp.org/beta/):
+Clone the repository:
 
-    (ql:quickload :cl-termbox)
+    git clone https://github.com/fouric/cl-termbox.git ~/quicklisp/local-projects/cl-termbox
 
 Load using ASDF:
 

@@ -159,8 +159,9 @@
 
 (defun peek-event (timeout)
   (let ((event (make-event)))
-    (tb-peek-event event timeout)
-    event))
+    (if (eq (tb-peek-event event timeout) 0)
+      nil
+      event)))
 
 (defun poll-event ()
   (let ((event (make-event)))
