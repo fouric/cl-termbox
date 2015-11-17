@@ -5,10 +5,6 @@
   (:use #:cl #:autowrap.minimal #:plus-c #:termbox.ffi)
   (:export
    ; check the individual function/constant/whatever docs to understand what these are; i don't want to repeat myself
-    #:make-event
-    #:event-data
-    #:free-event
-
     #:init #:shutdown
     #:clear #:present
     #:change-cell #:put-cell
@@ -38,6 +34,4 @@
     #:+bold+ #:+underline+ #:+reverse+
 
     #:+event-key+ #:+event-resize+ #:+event-mouse+
-
-    #:test
 ))

@@ -119,15 +119,20 @@
   (autowrap:free event))
 
 (defun event-data (event)
-  (list :type (termbox.ffi:tb-event.type event)
-	:mod (termbox.ffi:tb-event.mod event)
-	:key (termbox.ffi:tb-event.key event)
-	:ch (termbox.ffi:tb-event.ch event)
-	:w (termbox.ffi:tb-event.w event)
-	:h (termbox.ffi:tb-event.h event)
-	:x (termbox.ffi:tb-event.x event)
-	:y (termbox.ffi:tb-event.y event)))
-
+  (or event (append (list :type (termbox.ffi:tb-event.type event))
+		    (let ((type (termbox.ff:tb-event.type event)))
+		      (cond
+			((eq type termbox:+event-resize+)
+			 (list :w (termbox.ffi:tb-event.w event)
+			       :h (termbox.ffi:tb-event.h event)))
+			((eq type termbox:+event-mouse+)
+			 (list :x (termbox.ffi:tb-event.x event)
+			       :y (termbox.ffi:tb-event.y event)
+			       :key (termbox.ffi:tb-event.key event)))
+			((eq type termbox:+event-key+)
+			 (list :mod (termbox.ffi:tb-event.mod event)
+			       :ch (termbox.ffi:tb-event.ch event)
+			       :key (termbox.ffi:tb-event.key event))))))))
 
 (defun init ()
   (tb-init))
@@ -143,7 +148,7 @@
   (tb-present))
 
 
-(defun change-cell (x y char fg bg)
+(defun change-cell (x y char &optional (fg termbox:+default+) (bg termbox:+default+))
   (tb-change-cell x y char fg bg))
 
 (defun put-cell (x y cell)
@@ -158,28 +163,20 @@
 
 
 (defun peek-event (timeout)
-  (let ((event (make-event)))
-    (if (eq (tb-peek-event event timeout) 0)
-      nil
-      event)))
+  (let ((event (make-event))
+	(result nil))
+    (when (eq (tb-peek-event event timeout) 0)
+      (setf result (event-data event)))
+    (free-event event)
+    result))
 
 (defun poll-event ()
   (let ((event (make-event)))
     (tb-poll-event event)
-    event))
+    (let ((event-data (event-data event)))
+      (free-event event)
+      event-data)))
 
 
 (defun set-cursor (cx cy)
   (tb-set-cursor cx cy))
-
-
-(defun test ()
-  (init)
-  (clear)
-  (change-cell 0 0 (char-code #\#) +yellow+ 0)
-  (present)
-  (let ((event (poll-event)))
-    (print (getf (event-data event) :ch))
-    (free-event event))
-  (sleep 2)
-  (shutdown))

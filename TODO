@@ -1,1 +1,1 @@
-Fix issue where you have to use tb-const to get constants and not just use autowrapped constants
+Replace homemade event allocation functions with calls to autowrap/cffi

@@ -6,6 +6,11 @@ Introduction
 
 Termbox (https://github.com/nsf/termbox) is a ncurses-like library that allows for control over terminals a la top and vim. cl-termbox is a thin Common Lisp wrapper around Termbox, made with cl-autowrap (https://github.com/rpav/cl-autowrap).
 
+Disclaimer
+----------
+
+Although Termbox itself is relatively stable, cl-termbox is still undergoing API changes as I transition the code from a C-like model to a more Lispy form. If you want to build any stable application with cl-termbox, then I recommend waiting a few weeks until the API is a bit more stable.
+
 Instructions
 ------------
 
