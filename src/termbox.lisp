@@ -1,5 +1,4 @@
 (in-package :termbox)
-
 (asdf:load-system :cl-autowrap)
 (asdf:load-system :cl-plus-c)
 (use-package :plus-c)
@@ -120,7 +119,7 @@
 
 (defun event-data (event)
   (and event (append (list :type (termbox.ffi:tb-event.type event))
-		     (let ((type (termbox.ff:tb-event.type event)))
+		     (let ((type (termbox.ffi:tb-event.type event)))
 		       (cond
 			 ((eq type termbox:+event-resize+)
 			  (list :w (termbox.ffi:tb-event.w event)
@@ -149,33 +148,30 @@
 
 
 (defun change-cell (x y char &optional (fg termbox:+default+) (bg termbox:+default+))
-  (tb-change-cell x y char fg bg))
+  (tb-change-cell x y (ctypecase char
+			(integer char)
+			(standard-char (char-code char))) fg bg))
 
 (defun put-cell (x y cell)
   (tb-put-cell x y cell))
 
 
 (defun width ()
-  (tb-width))
+  (the integer (tb-width)))
 
 (defun height ()
-  (tb-height))
+  (the integer (tb-height)))
 
 
 (defun peek-event (timeout)
-  (let ((event (make-event))
-	(result nil))
+  (with-alloc (event '(:struct (tb-event)))
     (when (eq (tb-peek-event event timeout) 0)
-      (setf result (event-data event)))
-    (free-event event)
-    result))
+      (event-data event))))
 
 (defun poll-event ()
-  (let ((event (make-event)))
+  (with-alloc (event '(:struct (tb-event)))
     (tb-poll-event event)
-    (let ((event-data (event-data event)))
-      (free-event event)
-      event-data)))
+    (event-data event)))
 
 
 (defun set-cursor (cx cy)
