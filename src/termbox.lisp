@@ -117,6 +117,7 @@
 (defun free-event (event)
   (autowrap:free event))
 
+
 (defun event-data (event)
   (and event (append (list :type (termbox.ffi:tb-event.type event))
 		     (let ((type (termbox.ffi:tb-event.type event)))
@@ -163,15 +164,15 @@
   (the integer (tb-height)))
 
 
-(defun peek-event (timeout)
-  (with-alloc (event '(:struct (tb-event)))
-    (when (eq (tb-peek-event event timeout) 0)
-      (event-data event))))
-
 (defun poll-event ()
   (with-alloc (event '(:struct (tb-event)))
     (tb-poll-event event)
     (event-data event)))
+
+(defun peek-event (timeout)
+  (with-alloc (event '(:struct (tb-event)))
+    (unless (= (tb-peek-event event timeout) 0)
+      (event-data event))))
 
 
 (defun set-cursor (cx cy)
