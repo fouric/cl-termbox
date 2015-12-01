@@ -1,5 +1,5 @@
 # cl-termbox
-A Common Lisp wrapper around nsf/termbox (dead-simple curses-like terminal control)
+A thin Common Lisp wrapper around nsf/termbox (dead-simple curses-like terminal control)
 
 Introduction
 ------------
@@ -9,7 +9,7 @@ Termbox (https://github.com/nsf/termbox) is a ncurses-like library that allows f
 Disclaimer
 ----------
 
-Although Termbox itself is relatively stable, cl-termbox is still undergoing API changes as I transition the code from a C-like model to a more Lispy form. If you want to build any stable application with cl-termbox, then I recommend waiting a few weeks until the API is a bit more stable.
+Although Termbox itself is relatively stable, cl-termbox is still undergoing API changes as I get things fleshed out. If you want to build any stable application with cl-termbox, then I recommend waiting a few weeks until the API is a bit more stable. Additionally, this wrapper is very thin; if you want something with Lispy exceptions and type conversion, then you might want to check out the `tb` package of [cl-termbox-extras](https://github.com/fouric/cl-termbox-extras).
 
 Instructions
 ------------
@@ -42,6 +42,10 @@ Use modified versions of the Termbox C function names (put this in a file/functi
 Functions
 ---------
 
+    (termbox:running-p)
+
+Check to see if Termbox is running. Note that this only checks the value of an internal variable that is set upon calling `(init)` or `(shutdown)`; should the rare instance occur where `(init)` was called but Termbox did not actually start up properly, this will still return `t`. The moral of the story: don't completely trust this value, just use it as a first line of defense.
+
     (termbox:init)
 
 Initialize Termbox. This takes control of the current terminal in an ncurses-like style, so (1) it's much more difficult to extract debug information and (2) this can't be used from within Emacs with SLIME. This can be called twice without crashing the program, although it will cause wierd effects, so it is not recommended.
@@ -60,7 +64,7 @@ Synchonize the contents of the screen with the internal back buffer.
 
     (termbox:change-cell x y char &optional fg bg)
 
-Blit a character to the internal back buffer. `x` and `y` are the x and y locations of the cell to change, with (0, 0) being the upper-left corner of the terminal. `char` is either the character to blit to that location or the (char-code) of said character. `fg` and `bg` are the foreground and background colors, respectively, to set the cell to.
+Blit a character to the internal back buffer. `x` and `y` are the x and y locations of the cell to change, with (0, 0) being the upper-left corner of the terminal. `char` is the (char-code) of said character. `fg` and `bg` are the foreground and background colors, respectively, to set the cell to.
 
     (termbox:width)
 

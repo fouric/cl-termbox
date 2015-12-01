@@ -110,6 +110,7 @@
 (defconstant +event-resize+ termbox.ffi:+tb-event-resize+)
 (defconstant +event-mouse+ termbox.ffi:+tb-event-mouse+)
 
+(defparameter *running* nil)
 
 (defun make-event ()
   (autowrap:alloc '(:struct (tb-event))))
@@ -134,10 +135,16 @@
 				:ch (termbox.ffi:tb-event.ch event)
 				:key (termbox.ffi:tb-event.key event))))))))
 
+(defun running-p ()
+  *running*)
+
+
 (defun init ()
+  (setf *running* t)
   (tb-init))
 
 (defun shutdown ()
+  (setf *running* nil)
   (tb-shutdown))
 
 
@@ -149,9 +156,7 @@
 
 
 (defun change-cell (x y char &optional (fg termbox:+default+) (bg termbox:+default+))
-  (tb-change-cell x y (ctypecase char
-			(integer char)
-			(standard-char (char-code char))) fg bg))
+  (tb-change-cell x y char fg bg))
 
 (defun put-cell (x y cell)
   (tb-put-cell x y cell))
