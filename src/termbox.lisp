@@ -140,8 +140,10 @@
 
 
 (defun init ()
-  (setf *running* t)
-  (tb-init))
+  (let ((status (tb-init)))
+    (if (zerop status)
+	(setf *running* t))
+    status))
 
 (defun shutdown ()
   (setf *running* nil)

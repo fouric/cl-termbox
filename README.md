@@ -44,7 +44,7 @@ Functions
 
     (termbox:running-p)
 
-Check to see if Termbox is running. Note that this only checks the value of an internal variable that is set upon calling `(init)` or `(shutdown)`; should the rare instance occur where `(init)` was called but Termbox did not actually start up properly, this will still return `t`. The moral of the story: don't completely trust this value, just use it as a first line of defense.
+Check to see if Termbox is running.
 
     (termbox:init)
 
