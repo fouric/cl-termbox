@@ -66,6 +66,7 @@
 (defconstant +key-ctrl-s+ termbox.ffi:+tb-key-ctrl-s+)
 (defconstant +key-ctrl-t+ termbox.ffi:+tb-key-ctrl-t+)
 (defconstant +key-ctrl-u+ termbox.ffi:+tb-key-ctrl-u+)
+
 (defconstant +key-ctrl-v+ termbox.ffi:+tb-key-ctrl-v+)
 (defconstant +key-ctrl-w+ termbox.ffi:+tb-key-ctrl-w+)
 (defconstant +key-ctrl-x+ termbox.ffi:+tb-key-ctrl-x+)
@@ -119,34 +120,31 @@
   (autowrap:free event))
 
 
-(defun event-data (event)
-  (and event (append (list :type (termbox.ffi:tb-event.type event))
-		     (let ((type (termbox.ffi:tb-event.type event)))
-		       (cond
-			 ((eq type termbox:+event-resize+)
-			  (list :w (termbox.ffi:tb-event.w event)
-				:h (termbox.ffi:tb-event.h event)))
-			 ((eq type termbox:+event-mouse+)
-			  (list :x (termbox.ffi:tb-event.x event)
-				:y (termbox.ffi:tb-event.y event)
-				:key (termbox.ffi:tb-event.key event)))
-			 ((eq type termbox:+event-key+)
-			  (list :mod (termbox.ffi:tb-event.mod event)
-				:ch (termbox.ffi:tb-event.ch event)
-				:key (termbox.ffi:tb-event.key event))))))))
+(defstruct event
+  type
+  mod
+  key
+  ch
+  w
+  h
+  x
+  y)
 
-(defun running-p ()
-  *running*)
+(defun event-data (event)
+  (make-event :type (termbox.ffi:tb-event.type)
+	      :mod (termbox.ffi:tb-event.mod)
+	      :key (termbox.ffi:tb-event.key)
+	      :ch (termbox.ffi:tb-event.ch)
+	      :w (termbox.ffi:tb-event.w)
+	      :h (termbox.ffi:tb-event.h)
+	      :x (termbox.ffi:tb-event.x)
+	      :y (termbox.ffi:tb-event.y)))
 
 
 (defun init ()
-  (let ((status (tb-init)))
-    (if (zerop status)
-	(setf *running* t))
-    status))
+  (tb-init))
 
 (defun shutdown ()
-  (setf *running* nil)
   (tb-shutdown))
 
 
@@ -157,7 +155,7 @@
   (tb-present))
 
 
-(defun change-cell (x y char &optional (fg termbox:+default+) (bg termbox:+default+))
+(defun change-cell (x y char fg bg)
   (tb-change-cell x y char fg bg))
 
 (defun put-cell (x y cell)
