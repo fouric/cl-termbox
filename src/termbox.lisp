@@ -1,7 +1,9 @@
 (in-package :termbox)
-(asdf:load-system :cl-autowrap)
-(asdf:load-system :cl-plus-c)
-(use-package :plus-c)
+
+;(asdf:load-system :cl-autowrap)
+;(asdf:load-system :cl-plus-c)
+
+;(use-package :plus-c)
 
 (cffi:define-foreign-library termbox
   (t (:default "libtermbox")))
@@ -41,7 +43,7 @@
 
 ; all of the other keys
 (defconstant +key-ctrl-tilde+ termbox.ffi:+tb-key-ctrl-tilde+)
-(defconstant +key-ctrl-2+ termbox.ffi:+tb-key-ctrl-2+)
+(defconstant +key-ctrl-2+ termbox.ffi:+tb-key-ctrl-2+) ; "clash with C-~"
 (defconstant +key-ctrl-a+ termbox.ffi:+tb-key-ctrl-a+)
 (defconstant +key-ctrl-b+ termbox.ffi:+tb-key-ctrl-b+)
 (defconstant +key-ctrl-c+ termbox.ffi:+tb-key-ctrl-c+)
@@ -49,15 +51,12 @@
 (defconstant +key-ctrl-e+ termbox.ffi:+tb-key-ctrl-e+)
 (defconstant +key-ctrl-f+ termbox.ffi:+tb-key-ctrl-f+)
 (defconstant +key-ctrl-g+ termbox.ffi:+tb-key-ctrl-g+)
-(defconstant +key-backspace+ termbox.ffi:+tb-key-backspace+)
-(defconstant +key-ctrl-h+ termbox.ffi:+tb-key-ctrl-h+)
-(defconstant +key-tab+ termbox.ffi:+tb-key-tab+)
-(defconstant +key-ctrl-i+ termbox.ffi:+tb-key-ctrl-i+)
+(defconstant +key-ctrl-h+ termbox.ffi:+tb-key-ctrl-h+) ; "clash with C-Backspace"
+(defconstant +key-ctrl-i+ termbox.ffi:+tb-key-ctrl-i+) ; "clash with Tab"
 (defconstant +key-ctrl-j+ termbox.ffi:+tb-key-ctrl-j+)
 (defconstant +key-ctrl-k+ termbox.ffi:+tb-key-ctrl-k+)
 (defconstant +key-ctrl-l+ termbox.ffi:+tb-key-ctrl-l+)
-(defconstant +key-enter+ termbox.ffi:+tb-key-enter+)
-(defconstant +key-ctrl-m+ termbox.ffi:+tb-key-ctrl-m+)
+(defconstant +key-ctrl-m+ termbox.ffi:+tb-key-ctrl-m+) ; "clash with Enter"
 (defconstant +key-ctrl-n+ termbox.ffi:+tb-key-ctrl-n+)
 (defconstant +key-ctrl-o+ termbox.ffi:+tb-key-ctrl-o+)
 (defconstant +key-ctrl-p+ termbox.ffi:+tb-key-ctrl-p+)
@@ -66,7 +65,6 @@
 (defconstant +key-ctrl-s+ termbox.ffi:+tb-key-ctrl-s+)
 (defconstant +key-ctrl-t+ termbox.ffi:+tb-key-ctrl-t+)
 (defconstant +key-ctrl-u+ termbox.ffi:+tb-key-ctrl-u+)
-
 (defconstant +key-ctrl-v+ termbox.ffi:+tb-key-ctrl-v+)
 (defconstant +key-ctrl-w+ termbox.ffi:+tb-key-ctrl-w+)
 (defconstant +key-ctrl-x+ termbox.ffi:+tb-key-ctrl-x+)
@@ -113,7 +111,7 @@
 
 (defparameter *running* nil)
 
-(defun make-event ()
+(defun make-tb-event ()
   (autowrap:alloc '(:struct (tb-event))))
 
 (defun free-event (event)
@@ -131,14 +129,14 @@
   y)
 
 (defun event-data (event)
-  (make-event :type (termbox.ffi:tb-event.type)
-	      :mod (termbox.ffi:tb-event.mod)
-	      :key (termbox.ffi:tb-event.key)
-	      :ch (termbox.ffi:tb-event.ch)
-	      :w (termbox.ffi:tb-event.w)
-	      :h (termbox.ffi:tb-event.h)
-	      :x (termbox.ffi:tb-event.x)
-	      :y (termbox.ffi:tb-event.y)))
+  (make-event :type (termbox.ffi:tb-event.type event)
+	      :mod (termbox.ffi:tb-event.mod event)
+	      :key (termbox.ffi:tb-event.key event)
+	      :ch (termbox.ffi:tb-event.ch event)
+	      :w (termbox.ffi:tb-event.w event)
+	      :h (termbox.ffi:tb-event.h event)
+	      :x (termbox.ffi:tb-event.x event)
+	      :y (termbox.ffi:tb-event.y event)))
 
 
 (defun init ()

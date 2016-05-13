@@ -38,3 +38,17 @@
 
    #:+event-key+ #:+event-resize+ #:+event-mouse+
 ))
+
+(defpackage :tb
+  (:use #:cl-user #:cl)
+  (:export
+
+   #:running-p #:safe-shutdown
+
+   #:init #:shutdown
+   #:clear #:present
+   #:change-cell #:put-cell
+   #:width #:height
+   #:peek-event #:poll-event
+   #:set-cursor
+   ))

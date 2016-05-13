@@ -17,7 +17,9 @@
   ((:file "package")
    (:file "autowrap")
    (:file "termbox")
+   (:file "tb"
+	  :depends-on ("termbox"))
    (:module #:autospec
-    :pathname "autospec"
-    :components
-    ((:static-file "termbox.h")))))
+	    :pathname "autospec"
+	    :components
+	    ((:static-file "termbox.h")))))
