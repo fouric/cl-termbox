@@ -82,3 +82,40 @@
   (check-type cx integer "an integer")
   (check-type cy integer "an integer")
   (tb-set-cursor cx cy))
+
+
+(defun write-text (x y text &optional (fg termbox:+default+) (bg termbox:+default+))
+  "execute a series of change-cell's in a sequential manner such as to write a line of text"
+  (check-type x (integer 0 *) "a positive integer")
+  (check-type y (integer 0 *) "a positive integer")
+  (check-type text string "a string")
+  (check-type fg integer "a termbox color")
+  (check-type bg integer "a termbox color")
+  (dotimes (i (length text))
+    (tb:change-cell (+ x i) y (schar text i) fg bg)))
+
+(defun draw-horizontal-bar (x y w ch &key (fg termbox:+default+) (bg termbox:+default+))
+  "draw a horizontal bar"
+  (check-type x (integer 0 *) "a positive integer")
+  (check-type y (integer 0 *) "a positive integer")
+  (check-type w (integer 0 *) "a positive integer")
+  (check-type fg integer "a termbox color")
+  (check-type bg integer "a termbox color")
+  (dotimes (i w)
+    (termbox:change-cell (+ x i) y ch fg bg)))
+
+(defun event-data (event)
+  (and event (append (list :type (termbox.ffi:tb-event.type event))
+		     (let ((type (termbox.ffi:tb-event.type event)))
+		       (cond
+			 ((eq type termbox:+event-resize+)
+			  (list :w (termbox.ffi:tb-event.w event)
+				:h (termbox.ffi:tb-event.h event)))
+			 ((eq type termbox:+event-mouse+)
+			  (list :x (termbox.ffi:tb-event.x event)
+				:y (termbox.ffi:tb-event.y event)
+				:key (termbox.ffi:tb-event.key event)))
+			 ((eq type termbox:+event-key+)
+			  (list :mod (termbox.ffi:tb-event.mod event)
+				:ch (termbox.ffi:tb-event.ch event)
+				:key (termbox.ffi:tb-event.key event))))))))

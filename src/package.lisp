@@ -51,4 +51,6 @@
    #:width #:height
    #:peek-event #:poll-event
    #:set-cursor
+
+   #:write-text
    ))
