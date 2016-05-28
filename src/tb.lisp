@@ -47,7 +47,7 @@
       (termbox:present)
       (error 'not-running-error)))
 
-(defun change-cell (x y char fg bg)
+(defun change-cell (x y char &optional (fg termbox:+default+) (bg termbox:+default+))
   (check-type x (integer -1 *) "a nonzero integer")
   (check-type y (integer -1 *) "a nonzero integer")
   (check-type char (or (integer -1 *)
@@ -55,7 +55,10 @@
 		       (string 1)) "some representation of a single character")
   (check-type fg integer "a Termbox color")
   (check-type bg integer "a Termbox color")
-  (termbox:change-cell x y char fg bg))
+  (termbox:change-cell x y (typecase char
+			     (integer char)
+			     (standard-char (char-code char))
+			     (string (char-code (schar char 0)))) fg bg))
 
 (defun put-cell (x y cell)
   (check-type x integer "an integer")
