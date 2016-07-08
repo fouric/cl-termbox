@@ -5,7 +5,7 @@
   (:use #:cl #:autowrap.minimal #:plus-c #:termbox.ffi)
   (:export
 
-   #:event
+   #:event #:event-plist
 
    ;; check the individual function/constant/whatever docs to understand what these are; i don't want to repeat myself
    #:init #:shutdown

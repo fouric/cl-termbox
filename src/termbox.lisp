@@ -138,6 +138,15 @@
 	      :x (termbox.ffi:tb-event.x event)
 	      :y (termbox.ffi:tb-event.y event)))
 
+(defun event-plist (event)
+  (list :type (event-type event)
+	:mod (event-mod event)
+	:key (event-key event)
+	:ch (event-ch event)
+	:w (event-w event)
+	:h (event-h event)
+	:x (event-x event)
+	:y (event-y event)))
 
 (defun init ()
   (tb-init))
@@ -168,7 +177,7 @@
 
 
 (defun poll-event ()
-  (with-alloc (event '(:struct (tb-event)))
+  (with-alloc (event '(:struct (termbox.ffi:tb-event)))
     (tb-poll-event event)
     (event-data event)))
 
