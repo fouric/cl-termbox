@@ -122,3 +122,8 @@
 			  (list :mod (termbox.ffi:tb-event.mod event)
 				:ch (termbox.ffi:tb-event.ch event)
 				:key (termbox.ffi:tb-event.key event))))))))
+
+(defun select-output-mode (mode)
+  (check-type mode integer "an integer")
+  ;; TODO: find out the type of `cell`
+  (termbox:select-output-mode mode))

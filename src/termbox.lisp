@@ -109,6 +109,12 @@
 (defconstant +event-resize+ termbox.ffi:+tb-event-resize+)
 (defconstant +event-mouse+ termbox.ffi:+tb-event-mouse+)
 
+(defconstant +output-current+ termbox.ffi:+tb-output-current+)
+(defconstant +output-normal+ termbox.ffi:+tb-output-normal+)
+(defconstant +output-256+ termbox.ffi:+tb-output-256+)
+(defconstant +output-216+ termbox.ffi:+tb-output-216+)
+(defconstant +output-grayscale+ termbox.ffi:+tb-output-grayscale+)
+
 (defparameter *running* nil)
 
 (defun make-tb-event ()
@@ -189,3 +195,6 @@
 
 (defun set-cursor (cx cy)
   (tb-set-cursor cx cy))
+
+(defun select-output-mode (mode)
+  (tb-select-output-mode mode))
