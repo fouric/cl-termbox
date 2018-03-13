@@ -1,6 +1,11 @@
 # cl-termbox
 A thin Common Lisp wrapper around nsf/termbox (dead-simple curses-like terminal control)
 
+Status
+------
+
+Status: BROKEN! ...and I haven't had enough time to fix it recently. Patches welcome, or just start opening issues and I'll try to get around to them when I have time.
+
 Introduction
 ------------
 
