@@ -4,7 +4,7 @@ A thin Common Lisp wrapper around nsf/termbox (dead-simple curses-like terminal 
 Status
 ------
 
-Status: BROKEN! ...and I haven't had enough time to fix it recently. Patches welcome, or just start opening issues and I'll try to get around to them when I have time.
+ABANDONED! I don't have any use for Termbox now that I've wrapped my mind around cl-charms. If someone wants to take over maintenance of cl-termbox, please get in touch.
 
 Introduction
 ------------
